@@ -1,14 +1,16 @@
 import dspy
 import json
 
+# Only Tool
 def search_wikipedia(query: str) -> list[str]:
     results = dspy.ColBERTv2(url="http://20.102.90.50:2017/wiki17_abstracts")(query, k=3)
     return [x["text"] for x in results]
 
-react = dspy.ReAct("question -> answer", tools=[search_wikipedia])
 
 def main():
     dspy.configure(lm=dspy.LM("openai/gpt-4o-mini"))
+
+    react = dspy.ReAct("question -> answer", tools=[search_wikipedia])
 
     # Load trainset
     trainset = []
